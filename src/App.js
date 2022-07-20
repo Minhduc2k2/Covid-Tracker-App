@@ -1,8 +1,12 @@
+import { Container } from "@material-ui/core";
+import { sortBy } from "lodash";
 import { useState, useEffect } from "react";
 import { getCountries, getReportByCountry } from "./apis";
 import CountrySelector from "./components/CountrySelector";
 import Highlight from "./components/Highlight";
 import Summary from "./components/Summary";
+import "@fontsource/roboto";
+import moment from "moment";
 
 function App() {
   const [countries, setCountries] = useState([]);
@@ -10,7 +14,7 @@ function App() {
   const [report, setReport] = useState([]);
   useEffect(() => {
     getCountries().then((res) => {
-      setCountries(res.data);
+      setCountries(sortBy(res.data, "Country"));
       setSelectedCountryID("vn");
     });
   }, []);
@@ -31,15 +35,17 @@ function App() {
     }
   }, [countries, selectedCountryID]);
   return (
-    <div className="App">
+    <Container>
+      <h1 style={{ fontFamily: "roboto" }}>COVID TRACKER</h1>
+      <p style={{ fontFamily: "roboto" }}>{moment().format("DD/MM/YYYY")}</p>
       <CountrySelector
         countries={countries}
         handleOnChange={handleOnChange}
         value={selectedCountryID}
       />
       <Highlight report={report} />
-      <Summary report={report} />
-    </div>
+      <Summary report={report} selectedCountryID={selectedCountryID} />
+    </Container>
   );
 }
 

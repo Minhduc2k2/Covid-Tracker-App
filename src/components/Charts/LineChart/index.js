@@ -31,7 +31,7 @@ const generateOptions = (data) => {
       },
     },
     tooltip: {
-      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+      headerFormat: '<span style="font-size:10px">{point.x}</span><table>',
       pointFormat:
         '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
         '<td style="padding:0"><b>{point.y} ca</b></td></tr>',
@@ -47,7 +47,7 @@ const generateOptions = (data) => {
     },
     series: [
       {
-        name: "Tổng Ca nhiễm",
+        name: "Tổng ca nhiễm",
         data: data.map((item) => item.Confirmed),
       },
     ],
@@ -56,7 +56,7 @@ const generateOptions = (data) => {
 
 function LineChart({ data }) {
   const [options, setOptions] = useState({});
-  const [reportType, setReportType] = useState({});
+  const [reportType, setReportType] = useState("all");
 
   useEffect(() => {
     let customData = [];
@@ -86,6 +86,7 @@ function LineChart({ data }) {
     <div>
       <div className={"button-group"}>
         <button
+          className="active"
           onClick={(e) => {
             setReportType("all");
             handleOnClick(e);
@@ -115,4 +116,4 @@ function LineChart({ data }) {
   );
 }
 
-export default LineChart;
+export default React.memo(LineChart);

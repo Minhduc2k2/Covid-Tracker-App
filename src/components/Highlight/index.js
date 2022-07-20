@@ -1,4 +1,5 @@
 import classNames from "classnames/bind";
+import React from "react";
 import styles from "./Highlight.module.scss";
 import HighlightItem from "./HighlightItem";
 
@@ -14,7 +15,7 @@ function Highlight({ report }) {
     },
     {
       title: "Số ca khỏi",
-      count: data.Recovered,
+      count: data.Active - data.Deaths * 20,
       color: "green",
     },
     {
@@ -25,8 +26,9 @@ function Highlight({ report }) {
   ];
   return (
     <ul className={cx("list")}>
-      {summary.map((item) => (
+      {summary.map((item, index) => (
         <HighlightItem
+          key={index}
           title={item.title}
           count={item.count}
           color={item.color}
@@ -36,4 +38,4 @@ function Highlight({ report }) {
   );
 }
 
-export default Highlight;
+export default React.memo(Highlight);
