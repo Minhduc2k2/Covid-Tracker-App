@@ -1,7 +1,39 @@
+import { useState, useEffect } from "react";
+import { getCountries, getReportByCountry } from "./apis";
+import CountrySelector from "./components/CountrySelector";
+import Highlight from "./components/Highlight";
+import Summary from "./components/Summary";
+
 function App() {
+  const [countries, setCountries] = useState([]);
+  const [selectedCountryID, setSelectedCountryID] = useState("");
+  const [report, setReport] = useState([]);
+  useEffect(() => {
+    getCountries().then((res) => {
+      setCountries(res.data);
+    });
+  }, []);
+
+  const handleOnChange = (e) => {
+    setSelectedCountryID(e.target.value);
+  };
+
+  useEffect(() => {
+    const country = countries.find(
+      (country) => country.ISO2.toLowerCase() === selectedCountryID
+    );
+    if (country)
+      getReportByCountry(country.Slug).then((res) => {
+        //TODO: Bỏ đi phần tử cuối mảng vì chưa hết ngày nên dữ liệu không chính xác
+        res.data.pop();
+        setReport(res.data);
+      });
+  }, [countries, selectedCountryID]);
   return (
     <div className="App">
-      <h1>Covid Tracker</h1>
+      <CountrySelector countries={countries} handleOnChange={handleOnChange} />
+      <Highlight report={report} />
+      <Summary report={report} />
     </div>
   );
 }
