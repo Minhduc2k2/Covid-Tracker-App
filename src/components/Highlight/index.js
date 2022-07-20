@@ -1,23 +1,37 @@
 import classNames from "classnames/bind";
 import styles from "./Highlight.module.scss";
+import HighlightItem from "./HighlightItem";
 
 const cx = classNames.bind(styles);
 
-function Highlight() {
+function Highlight({ report }) {
+  const data = report && report.length ? report[report.length - 1] : [];
+  const summary = [
+    {
+      title: "Số ca nhiễm",
+      count: data.Confirmed,
+      color: "red",
+    },
+    {
+      title: "Số ca khỏi",
+      count: data.Recovered,
+      color: "green",
+    },
+    {
+      title: "Số ca tử vong",
+      count: data.Deaths,
+      color: "grey",
+    },
+  ];
   return (
     <ul className={cx("list")}>
-      <li className={cx("item", "red")}>
-        <p className={cx("title")}>Số ca nhiễm</p>
-        <span className={cx("figure")}>300</span>
-      </li>
-      <li className={cx("item", "green")}>
-        <p className={cx("title")}>Số ca khỏi</p>
-        <span className={cx("figure")}>300</span>
-      </li>
-      <li className={cx("item", "grey")}>
-        <p className={cx("title")}>Số ca tử vong</p>
-        <span className={cx("figure")}>300</span>
-      </li>
+      {summary.map((item) => (
+        <HighlightItem
+          title={item.title}
+          count={item.count}
+          color={item.color}
+        />
+      ))}
     </ul>
   );
 }

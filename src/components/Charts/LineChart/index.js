@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import moment from "moment";
-import { Button, ButtonGroup } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+// import classNames from "classnames/bind";
+import "./LineChart.css";
+
+// const cx = classNames.bind(styles);
 
 const generateOptions = (data) => {
-  const categories = [];
-
+  const categories = data.map((item) => moment(item.Date).format("DD/MM/YYYY"));
   return {
     chart: {
       height: 500,
@@ -46,8 +48,7 @@ const generateOptions = (data) => {
     series: [
       {
         name: "Tổng Ca nhiễm",
-        // data: data.map((item) => item.Confirmed),
-        data: [],
+        data: data.map((item) => item.Confirmed),
       },
     ],
   };
@@ -55,10 +56,63 @@ const generateOptions = (data) => {
 
 function LineChart({ data }) {
   const [options, setOptions] = useState({});
+  const [reportType, setReportType] = useState({});
+
   useEffect(() => {
-    setOptions(generateOptions(data));
-  }, [data]);
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+    let customData = [];
+    switch (reportType) {
+      case "all":
+        customData = data;
+        break;
+      case "month":
+        customData = data.slice(data.length - 30);
+        break;
+      case "week":
+        customData = data.slice(data.length - 7);
+        break;
+      default:
+        break;
+    }
+    setOptions(generateOptions(customData));
+  }, [data, reportType]);
+
+  const handleOnClick = (e) => {
+    const button_list = document.querySelectorAll("button");
+    const button_arr = [...button_list];
+    button_arr.forEach((button) => button.classList.remove("active"));
+    e.target.classList.add("active");
+  };
+  return (
+    <div>
+      <div className={"button-group"}>
+        <button
+          onClick={(e) => {
+            setReportType("all");
+            handleOnClick(e);
+          }}
+        >
+          TẤT CẢ
+        </button>
+        <button
+          onClick={(e) => {
+            setReportType("month");
+            handleOnClick(e);
+          }}
+        >
+          30 Ngày
+        </button>
+        <button
+          onClick={(e) => {
+            setReportType("week");
+            handleOnClick(e);
+          }}
+        >
+          7 Ngày
+        </button>
+      </div>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
 }
 
 export default LineChart;
