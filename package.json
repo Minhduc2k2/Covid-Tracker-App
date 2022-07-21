@@ -11,6 +11,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.27.2",
     "classnames": "^2.3.1",
+    "gh-pages": "^4.0.0",
     "highcharts": "^10.2.0",
     "highcharts-react-official": "^3.1.0",
     "lodash": "^4.17.21",
@@ -25,7 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -47,5 +50,6 @@
   },
   "devDependencies": {
     "sass": "^1.53.0"
-  }
+  },
+  "homepage": "http://Minhduc2k2.github.io/Covid-Tracker-App"
 }
